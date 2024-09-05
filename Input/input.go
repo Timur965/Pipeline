@@ -2,6 +2,7 @@ package Input
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 )
 
@@ -14,6 +15,7 @@ func InputData() (<-chan int, <-chan bool) {
 		defer close(data)
 
 		text := ""
+		log.Println("\nВвод данных")
 		for {
 			fmt.Print("Введите число: ")
 			fmt.Scan(&text)

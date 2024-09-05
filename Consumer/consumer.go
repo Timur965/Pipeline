@@ -1,8 +1,12 @@
 package Consumer
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+)
 
 func Output(done <-chan bool, data <-chan int) {
+	log.Println("\nВывод обработаных данных")
 	go func() {
 		for {
 			select {

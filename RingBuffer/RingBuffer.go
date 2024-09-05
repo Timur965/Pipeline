@@ -1,6 +1,9 @@
 package RingBuffer
 
-import "sync"
+import (
+	"log"
+	"sync"
+)
 
 type RingBuffer struct {
 	buff     []int
@@ -13,6 +16,7 @@ type RingBuffer struct {
 }
 
 func NewRingBuffer(cap int) *RingBuffer {
+	log.Println("\nСоздан кольцевой буфер")
 	return &RingBuffer{
 		buff:     make([]int, cap),
 		capacity: cap,
@@ -32,6 +36,7 @@ func (rb *RingBuffer) Read() int {
 }
 
 func (rb *RingBuffer) Write(value int) {
+	log.Println("\nЗапись в кольцевой буфер")
 	rb.m.Lock()
 	defer rb.m.Unlock()
 	rb.buff[rb.end] = value
@@ -40,19 +45,21 @@ func (rb *RingBuffer) Write(value int) {
 }
 
 func (rb *RingBuffer) ReadAll() []int {
-    rb.m.Lock()
-    defer rb.m.Unlock()
+	log.Println("\nЧтение из кольцевого буфера")
 
-    allData := make([]int, 0, rb.capacity)
+	rb.m.Lock()
+	defer rb.m.Unlock()
 
-    for i := rb.start; i != rb.end; i = (i + 1) % rb.capacity {
-        allData = append(allData, rb.buff[i])
-    }
+	allData := make([]int, 0, rb.capacity)
+
+	for i := rb.start; i != rb.end; i = (i + 1) % rb.capacity {
+		allData = append(allData, rb.buff[i])
+	}
 
 	rb.start = 0
 	rb.end = 0
 
-    return allData
+	return allData
 }
 
 func (rb *RingBuffer) IsEmpty() bool {
